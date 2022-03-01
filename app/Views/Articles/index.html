@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<a href="/articles/create">Create new Article</a>
+<html>
+<h1>Articles</h1>
+
+
+<body style="text-align: center">
+<ul id="navigation">
+    {% for article in articles %}
+    <li><a href="articles/{{ article.id }}">{{ article.title }}</a></li>
+    <form style="padding: 5px" method="post" onclick="return confirm('Are you sure?')" action="/articles/{{ article.id}}/delete">
+        <button type="submit">Remove</button>
+    </form>
+    {% endfor %}
+</ul>
+
+
+</body>
+</html>
