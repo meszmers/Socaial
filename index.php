@@ -7,7 +7,11 @@ use App\View;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
+session_start();
+
 $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
+
+    $r->addRoute('GET', '/', [App\Controllers\UsersController::class, "logout"]);
 
     //Article Routes
     $r->addRoute('GET', '/articles', [App\Controllers\ArticleController::class, "index"]);
@@ -16,6 +20,7 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
     $r->addRoute('GET', '/articles/create', [App\Controllers\ArticleController::class, 'create']);
     $r->addRoute('POST', '/articles', [App\Controllers\ArticleController::class, 'store']);
     $r->addRoute('POST', '/articles/{id:\d+}/delete', [App\Controllers\ArticleController::class, 'delete']);
+    $r->addRoute('POST', '/articles/{id:\d+}/comment', [App\Controllers\ArticleController::class, 'comment']);
 
     $r->addRoute('GET', '/articles/{id:\d+}/edit', [App\Controllers\ArticleController::class, 'edit']);
     $r->addRoute('POST', '/articles/{id:\d+}', [App\Controllers\ArticleController::class, 'update']);
@@ -25,6 +30,8 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
     $r->addRoute('POST', '/register/true', [App\Controllers\UsersController::class, "addToDataBase"]);
     $r->addRoute('GET', '/login', [App\Controllers\UsersController::class, "login"]);
     $r->addRoute('POST', '/login/true', [App\Controllers\UsersController::class, "loginValidation"]);
+    $r->addRoute('GET', '/logout', [App\Controllers\UsersController::class, "logout"]);
+
 
 
 
@@ -61,6 +68,7 @@ switch ($routeInfo[0]) {
 
 
         $twig = new Environment(new FilesystemLoader('app/Views'));
+
 
         if($response instanceof View) {
             echo $twig->render($response->getPath(), $response->getVars());

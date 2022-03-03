@@ -13,7 +13,10 @@ class UsersController {
         return new View("Users/register.html");
     }
     public function login() :View {
-        return new View("Users/login.html");
+
+        if(!empty($_SESSION["login"])) {
+            return new View("Articles/index.html");
+        } else return new View("Users/login.html");
     }
     public function addToDataBase(){
 
@@ -37,7 +40,15 @@ class UsersController {
         $user = $resultSet->fetchAssociative();
 
         if(password_verify($_POST["pwdLogin"], $user["password"])) {
+            $_SESSION["login"] = ["id" => $user["id"], "name"=>$user["name"], "surname"=>$user["surname"]];
             return new Redirect("/articles");
         } else return new Redirect("/login");
+    }
+
+    public function logout(){
+
+        session_destroy();
+
+        return new Redirect("/login");
     }
 }

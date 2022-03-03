@@ -6,6 +6,7 @@ use App\Database;
 use App\Redirect;
 use App\View;
 use App\Models\Article;
+use App\Models\Comment;
 
 class ArticleController {
 
@@ -34,7 +35,7 @@ class ArticleController {
 
         $connection = Database::connection();
 
-        $data = $connection
+        $article = $connection
             ->createQueryBuilder()
             ->select('id', 'title', 'description', 'created_at')
             ->from('articles')
@@ -43,11 +44,40 @@ class ArticleController {
             ->fetchAllAssociative();
 
 
-        $article = new Article($data[0]["id"], $data[0]["title"], $data[0]["description"], $data[0]["created_at"]);
+        $article = new Article($article[0]["id"], $article[0]["title"], $article[0]["description"], $article[0]["created_at"]);
+
+        $commentData = $connection
+            ->createQueryBuilder()
+            ->select('person_id', 'comment', "time")
+            ->from('comments')
+            ->where('article_id = '.$vars["id"])
+            ->executeQuery()
+            ->fetchAllAssociative();
+
+        $comments = [];
+
+        foreach($commentData as$index=>$make) {
+          $personData = $connection
+                ->createQueryBuilder()
+                ->select('name', 'surname')
+                ->from('users')
+                ->where('id = '.$make["person_id"])
+                ->executeQuery()
+                ->fetchAllAssociative();
+
+          $comments[] = new Comment(
+              $vars["id"],
+              $make["person_id"],
+              $make["comment"],
+              $personData[0]["name"],
+              $personData[0]["surname"],
+              $make["time"]);
 
 
+        }
 
-        return new View("Articles/show.html",["article" => $article]);
+
+        return new View("Articles/show.html",["article" => $article, "comments"=> $comments]);
     }
 
     public function create() : View
@@ -94,5 +124,11 @@ class ArticleController {
 
         return new Redirect("/articles");
 
+    }
+
+    public function comment($vars) : Redirect {
+
+        Database::connection()->insert('comments', ['article_id' => $vars["id"], 'person_id' => $_SESSION["login"]["id"], "comment" => $_POST["comment"]]);
+        return new Redirect("/articles/".$vars["id"]);
     }
 }

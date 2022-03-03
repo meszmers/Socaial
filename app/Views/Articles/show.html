@@ -1,12 +1,46 @@
 <!DOCTYPE html>
-<a href="/articles">Back</a>
-<a href="/articles/{{ article.id}}/edit">Edit</a>
-<html>
-<h1>{{ article.title }}</h1><h4>{{ article.createdAt }}</h4>
 
-<body style="text-align: center">
-<div>
+
+<html>
+
+
+<body style="text-align: left">
+<a href="/articles">Back</a>
+
+<div style="text-align: center">
+    <h1>{{ article.title }}</h1><h4>{{ article.createdAt }}</h4><a href="/articles/{{ article.id}}/edit">Edit</a>
+</div>
+
+<div style="
+    text-align: center;
+    background: #afc79d;
+    padding: 20px;
+    border-radius: 25px;
+    margin-left: 700px;
+    margin-right: 700px;
+
+    ">
     {{ article.description }}
+</div>
+<div>
+   <h2>Comments</h2>
+    <form action="/articles/{{article.id}}/comment" method="post">
+        <textarea name="comment">
+
+        </textarea>
+        <button type="submit">Comment</button>
+    </form>
+
+        {% for comment in comments %}
+        <div style="margin: 10px; border: 2px solid green; padding: 5px">
+
+            {{ comment.name }} {{ comment.surname}} : <br><br>
+            {{ comment.comment}}
+            <h5>{{comment.time}}</h5>
+        </div>
+        {% endfor %}
+
+
 </div>
 
 
