@@ -1,20 +1,16 @@
 <?php
 namespace App\Models;
-class User {
+class UserProfile {
     private $id;
     private $name;
     private $surname;
-    private $password;
-    private $email;
 
-    public function __construct($id, $name, $surname, $password, $email)
+    public function __construct($id, $name, $surname)
     {
 
         $this->id = $id;
         $this->name = $name;
         $this->surname = $surname;
-        $this->password = $password;
-        $this->email = $email;
     }
 
 
@@ -23,19 +19,10 @@ class User {
         return $this->id;
     }
 
-    public function getEmail()
-    {
-        return $this->email;
-    }
 
     public function getName()
     {
         return $this->name;
-    }
-
-    public function getPassword()
-    {
-        return $this->password;
     }
 
     public function getSurname()

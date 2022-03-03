@@ -32,6 +32,9 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
     $r->addRoute('POST', '/login/true', [App\Controllers\UsersController::class, "loginValidation"]);
     $r->addRoute('GET', '/logout', [App\Controllers\UsersController::class, "logout"]);
 
+    $r->addRoute('GET', '/users', [App\Controllers\UsersController::class, "index"]);
+    $r->addRoute('GET', '/users/{userid:\d+}', [App\Controllers\UsersController::class, "show"]);
+
 
 
 

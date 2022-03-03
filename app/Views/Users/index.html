@@ -1,1 +1,8 @@
-All Users
+<h2>Other Users</h2>
+{% for user in users %}
+<div>
+
+    {{user.name}} {{user.surname}} <a href="/users/{{user.id}}">View Profile</a>
+
+</div>
+{% endfor %}

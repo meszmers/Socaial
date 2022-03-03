@@ -3,6 +3,8 @@
 namespace App\Controllers;
 
 use App\Database;
+use App\Models\User;
+use App\Models\UserProfile;
 use App\Redirect;
 use App\View;
 
@@ -51,4 +53,36 @@ class UsersController {
 
         return new Redirect("/login");
     }
+   public function index() : View{
+       $connection = Database::connection()
+           ->createQueryBuilder()
+           ->select('id', 'name', 'surname')
+           ->from('users')
+           ->executeQuery()
+           ->fetchAllAssociative();
+       $users = [];
+       foreach ($connection as $model) {
+           if($model["id"] == $_SESSION["login"]["id"]) {
+               continue;
+           }
+           $users[] = new UserProfile($model["id"], $model["name"], $model["surname"]);
+       }
+
+
+        return new View("Users/index.html",["users" => $users]);
+   }
+
+   public function show($vars) : View {
+       $connection = Database::connection()
+           ->createQueryBuilder()
+           ->select('id', 'name', 'surname')
+           ->from('users')
+           ->where("id = ". $vars["userid"])
+           ->executeQuery()
+           ->fetchAllAssociative();
+
+        $user = new UserProfile($connection[0]["id"], $connection[0]["name"], $connection[0]["surname"]);
+
+        return new View("Users/show.html", ["user" => $user]);
+   }
 }
