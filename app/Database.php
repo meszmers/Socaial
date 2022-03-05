@@ -10,7 +10,7 @@ class Database {
     public static function connection() {
         if(self::$connection === null) {
             $connectionParams = [
-                'dbname' => 'Social',
+                'dbname' => 'SocialPortal',
                 'user' => 'root',
                 'password' => 'password',
                 'host' => 'localhost',

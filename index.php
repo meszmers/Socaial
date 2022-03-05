@@ -36,8 +36,6 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
     $r->addRoute('GET', '/users/{userid:\d+}', [App\Controllers\UsersController::class, "show"]);
 
 
-
-
 });
 
 // Fetch method and URI from somewhere
